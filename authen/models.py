@@ -5,7 +5,7 @@ from django.conf import settings
 
 class CustomUser(AbstractUser):
     """Custom Users Table"""
-
+    summ = models.FloatField(default=0, null=True, blank=True)
     avatar = models.ImageField(upload_to="avatars/", null=True, blank=True)
 
 
@@ -18,43 +18,6 @@ class CheckSms(models.Model):
         blank=True
     )
     datetime = models.DateTimeField(auto_now_add=True)
-
-
-# class CategoriesCourse(models.Model):
-#     """CategoriesCourse Table"""
-
-#     name = models.CharField(max_length=100)
-#     img = models.ImageField(upload_to="categories_course/", null=True, blank=True)
-
-
-# class Course(models.Model):
-#     """CategoriesCourse Table"""
-#     name = models.CharField(max_length=100)
-#     content = models.TextField()
-#     course_logo = models.ImageField(upload_to="course_logo/")
-#     category_id = models.ForeignKey(CategoriesCourse, on_delete=models.CASCADE)
-#     summ_course = models.FloatField()
-#     verification_course = models.BooleanField(default=False)
-#     author_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     datetime = models.DateTimeField(auto_now_add=True)
-
-
-# class CourseLesson(models.Model):
-#     """CategoriesCourse Table"""
-#     name = models.CharField(max_length=250)
-#     content = models.TextField()
-#     video = models.FileField(
-#         upload_to="course_lesson/",
-#         null=True,
-#         validators=[
-#             FileExtensionValidator(
-#                 allowed_extensions=["MOV", "avi", "mp4", "webm", "mkv"]
-#             )
-#         ],
-#     )
-#     files = models.FileField(upload_to="course_lesson/", null=True, blank=True)
-#     courser_id = models.ForeignKey(Course, on_delete=models.CASCADE)
-#     datetime = models.DateTimeField(auto_now_add=True)
 
 
 # class BuyCourse(models.Model):

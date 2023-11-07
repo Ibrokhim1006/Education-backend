@@ -31,8 +31,10 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
-    'django_rest_passwordreset',
+    "django_rest_passwordreset",
     "authen",
+    "course",
+    "other_blog",
 ]
 
 MIDDLEWARE = [

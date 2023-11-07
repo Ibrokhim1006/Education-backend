@@ -33,6 +33,8 @@ urlpatterns = [
         include("django_rest_passwordreset.urls", namespace="password_reset"),
     ),
     path("authen/api/", include("authen.urls")),
+    path('course/api/', include('course.urls')),
+    path('others_blogs/api/', include('other_blog.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

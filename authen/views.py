@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from authen.renderers import UserRenderers
 from authen.models import CustomUser, CheckSms
+from django.db.models import Q
 from authen.serializers import (
     UserGroupsSerializers,
     UserSigInUpSerializers,
@@ -32,7 +33,7 @@ class UserGroupsViews(APIView):
     permission = [IsAuthenticated]
 
     def get(self, request):
-        queryset = Group.objects.all()
+        queryset = Group.objects.filter(Q(name='student') | Q(name='teacher'))
         serializers = UserGroupsSerializers(queryset, many=True)
         return Response(serializers.data, status=status.HTTP_200_OK)
 
@@ -167,3 +168,23 @@ def change_password(request):
                 status=status.HTTP_400_BAD_REQUEST
                 )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserTeachersViews(APIView):
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    def get(self, request):
+        queryset = CustomUser.objects.filter(groups__name__in=['teacher'])
+        serializers = UserInformationSerializers(queryset, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+
+class UserStudentViews(APIView):
+    render_classes = [UserRenderers]
+    permission = [IsAuthenticated]
+
+    def get(self, request):
+        queryset = CustomUser.objects.filter(groups__name__in=['student'])
+        serializers = UserInformationSerializers(queryset, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)

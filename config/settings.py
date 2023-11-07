@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
+    'django_rest_passwordreset',
     "authen",
 ]
 
@@ -176,3 +177,18 @@ SWAGGER_SETTINGS = {
 }
 
 AUTH_USER_MODEL = "authen.CustomUser"
+
+
+# Email Backend Configuration
+EMAIL_BACKEND = (
+    # Replace with your preferred backend
+    "django.core.mail.backends.smtp.EmailBackend"
+)
+
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "istamovibrohim8@gmail.com"
+EMAIL_HOST_PASSWORD = "xuaokkmfmsaxbdyu"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_TIMEOUT = 300  # in seconds
+DEFAULT_FROM_EMAIL = "unipointsoftwaredevelopment@gmail.com"

@@ -1,5 +1,6 @@
 """ Django DRF Packaging """
 from rest_framework import status
+from django.http import JsonResponse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -139,7 +140,7 @@ class CourseViews(APIView):
         return self.paginator.get_paginated_response(data)
 
     def get(self, request, format=None, *args, **kwargs):
-        instance = Course.objects.all().order_by("pk")
+        instance = Course.objects.filter(verification_course=True)
         page = self.paginate_queryset(instance)
         if page is not None:
             serializer = self.get_paginated_response(
@@ -176,7 +177,7 @@ class CourseCrudViews(APIView):
         return Response(serializers.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
-        serializers = CourseCrudSerializers(
+        serializers = CourseCrudSerializers(    
             instance=Course.objects.filter(id=pk)[0],
             data=request.data, partial=True
         )
@@ -259,6 +260,39 @@ class CategoriesInCourseViews(APIView):
         return Response(
             {"data": serializer.data, "page_number": self.paginator.page_size},
             status=status.HTTP_200_OK,
+        )
+
+
+class CourseNoActiViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request):
+        instance = Course.objects.filter(verification_course=False)
+        ls = []
+        for item in instance:
+            ls.append({
+                'id': item.id,
+                'name': item.name,
+                "verification_course": item.verification_course})
+        return Response({'data': ls}, status=status.HTTP_200_OK)
+
+
+class ActiveateCourseCrudViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request, pk):
+        objects_list = Course.objects.filter(id=pk)
+        serializers = LessonCourseSerializers(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+    def put(self, request, pk):
+        instance = Course.objects.filter(id=pk)[0]
+        instance.verification_course = True
+        instance.save()
+        return Response(
+            {"Message": "update"}, status=status.HTTP_200_OK
         )
 
 

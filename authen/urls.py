@@ -7,6 +7,8 @@ from authen.views import (
     CheckSmsCode,
     UserProfilesViews,
     UserUpdateView,
+    UserTeachersViews,
+    UserStudentViews,
 )
 
 urlpatterns = [
@@ -16,5 +18,7 @@ urlpatterns = [
     path('check_sms_code/', CheckSmsCode.as_view()),
     path('user_profiles_views/', UserProfilesViews.as_view()),
     path('user_update_view/', UserUpdateView.as_view()),
+    path('user_teachers_views', UserTeachersViews.as_view()),
+    path('user_student_views/', UserStudentViews.as_view()),
 
 ]

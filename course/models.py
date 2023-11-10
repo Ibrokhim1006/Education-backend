@@ -17,10 +17,11 @@ class Course(models.Model):
     content = models.TextField()
     course_logo = models.ImageField(upload_to="course_logo/")
     category_id = models.ForeignKey(CategoriesCourse, on_delete=models.CASCADE)
-    summ_course = models.FloatField()
+    summ_course = models.FloatField(default=0, null=True, blank=True)
     verification_course = models.BooleanField(default=False)
     author_id = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE, null=True, blank=True)
     datetime = models.DateTimeField(auto_now_add=True)
 
 

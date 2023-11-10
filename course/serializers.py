@@ -95,7 +95,6 @@ class CourseCrudSerializers(serializers.ModelSerializer):
 
         def create(self, validated_data):
             """Create ExpeectedSalary"""
-
             create = Course.objects.create(**validated_data)
             create.author_id = self.context.get("author_id")
             create.save()

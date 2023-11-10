@@ -76,10 +76,11 @@ class UserSigInUpSerializers(serializers.ModelSerializer):
             "last_name", instance.last_name)
         instance.username = validated_data.get("username", instance.username)
         instance.email = validated_data.get("email", instance.email)
-        if self.context.get("avatar") == None:
-            instance.avatar = instance.avatar
-        else:
+        if instance.avatar == None:
             instance.avatar = self.context.get("avatar")
+        else:
+            instance.avatar = validated_data.get(
+                    "avatar", instance.avatar)
         instance.save()
         return instance
 
@@ -105,7 +106,8 @@ class UserInformationSerializers(serializers.ModelSerializer):
         """User Model Fileds"""
 
         model = CustomUser
-        fields = ["id", "username", "first_name", "last_name", "groups"]
+        fields = [
+            "id", "username", "first_name", "last_name", "avatar", "groups"]
 
 
 class ChangePasswordSerializer(serializers.Serializer):

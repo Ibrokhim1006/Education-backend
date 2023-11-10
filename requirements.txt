@@ -8,9 +8,11 @@ django-staticfiles==1.2.1
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.3.0
 drf-spectacular==0.26.5
+gunicorn==21.2.0
 inflection==0.5.1
 jsonschema==4.19.2
 jsonschema-specifications==2023.7.1
+packaging==23.2
 Pillow==10.1.0
 postgres==4.0
 psycopg2-binary==2.9.9

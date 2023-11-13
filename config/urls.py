@@ -9,19 +9,18 @@ from drf_spectacular.views import SpectacularAPIView
 
 
 urlpatterns = [
-    path("schema/", SpectacularAPIView.as_view(), name="schema"),
-    path("admin/", admin.site.urls),
+    path("project/edu-app/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("project/edu-app/api/admin/", admin.site.urls),
     path(
-        "api/token/", jwt_views.TokenObtainPairView.as_view(),
+        "project/edu-app/api/token/", jwt_views.TokenObtainPairView.as_view(),
         name="token_obtain_pair"
     ),
     path(
-        "api/token/refresh/", jwt_views.TokenRefreshView.as_view(),
+        "project/edu-app/api/token/refresh/", jwt_views.TokenRefreshView.as_view(),
         name="token_refresh"
     ),
-    path("admin/", admin.site.urls),
     path(
-        "docs/",
+        "project/edu-app/api/docs/",
         TemplateView.as_view(
             template_name="doc.html",
             extra_context={"schema_url": "api_schema"}
@@ -29,12 +28,12 @@ urlpatterns = [
         name="swagger-ui",
     ),
     path(
-        "api/password_reset/",
+        "project/edu-app/api/password_reset/",
         include("django_rest_passwordreset.urls", namespace="password_reset"),
     ),
-    path("authen/api/", include("authen.urls")),
-    path('course/api/', include('course.urls')),
-    path('others_blogs/api/', include('other_blog.urls')),
+    path("project/edu-app/api/authen/api/", include("authen.urls")),
+    path('project/edu-app/api/course/api/', include('course.urls')),
+    path('project/edu-app/api/others_blogs/api/', include('other_blog.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

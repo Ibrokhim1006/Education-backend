@@ -34,8 +34,8 @@ urlpatterns = [
     path("project/edu-app/api/authen/api/", include("authen.urls")),
     path('project/edu-app/api/course/api/', include('course.urls')),
     path('project/edu-app/api/others_blogs/api/', include('other_blog.urls')),
-    path('real_estate/api/', include('real_estate.urls')),
-    path('youtobe/api/', include('youtobe.urls')),
+    path('project/real_estate/api/', include('real_estate.urls')),
+    path('project/youtobe/api/', include('youtobe.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

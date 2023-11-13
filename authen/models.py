@@ -20,6 +20,13 @@ class CheckSms(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
 
 
+class PyemntSumm(models.Model):
+    summ = models.CharField(max_length=20, null=True, blank=True)
+    days = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return self.summ
+
 # class BuyCourse(models.Model):
 #     """CategoriesCourse Table"""
 #     user_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

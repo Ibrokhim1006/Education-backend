@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     "authen",
     "course",
     "other_blog",
+    'real_estate',
+    'youtobe',
 ]
 
 MIDDLEWARE = [

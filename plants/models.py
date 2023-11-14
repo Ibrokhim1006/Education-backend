@@ -1,4 +1,7 @@
 from django.db import models
+from authen.models import (
+    CustomUser
+)
 
 
 class PlantCategories(models.Model):
@@ -54,5 +57,21 @@ class CareTopics(models.Model):
     care_topic_video_minutes = models.CharField(
         max_length=255, null=True, blank=True)
 
+
     def __str__(self):
         return self.care_topic_name
+
+
+class CareTopicHistory(models.Model):
+    care_topic_id = models.ForeignKey(
+        CareTopics, on_delete=models.CASCADE,
+        null=True, blank=True
+    )
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE,
+        null=True, blank=True
+    )
+    created_at = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.care_topic_id.care_topic_name} {self.user.first_name} {self.user.last_name}'

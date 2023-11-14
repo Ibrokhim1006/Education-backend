@@ -36,6 +36,7 @@ urlpatterns = [
     path('project/edu-app/api/others_blogs/api/', include('other_blog.urls')),
     path('project/real_estate/api/', include('real_estate.urls')),
     path('project/youtobe/api/', include('youtobe.urls')),
+    path('project/plants/api/', include('plants.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

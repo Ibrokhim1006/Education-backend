@@ -1,9 +1,5 @@
 from django.db import models
 
-from authen.models import (
-    CustomUser
-)
-
 
 class PlantCategories(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
@@ -20,14 +16,18 @@ class Plants(models.Model):
     plant_tall = models.CharField(max_length=255, null=True, blank=True)
     plant_price = models.CharField(max_length=255, null=True, blank=True)
     plant_description = models.CharField(max_length=255, null=True, blank=True)
-    plant_categories = models.ForeignKey(PlantCategories, on_delete=models.CASCADE, null=True, blank=True)
+    plant_categories = models.ForeignKey(
+        PlantCategories, on_delete=models.CASCADE, null=True, blank=True
+    )
     plant_type = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateField(auto_now_add=True)
 
 
 class PlantImages(models.Model):
-    plant_id = models.ForeignKey(Plants, on_delete=models.CASCADE, null=True, blank=True)
-    plant_image = models.ImageField(upload_to='plants/', null=True, blank=True)
+    plant_id = models.ForeignKey(
+        Plants, on_delete=models.CASCADE, null=True, blank=True
+    )
+    plant_image = models.ImageField(upload_to="plants/", null=True, blank=True)
 
     def __str__(self):
         return self.plant_id.plant_name
@@ -35,20 +35,24 @@ class PlantImages(models.Model):
 
 class CarePlanting(models.Model):
     care_plant_name = models.CharField(max_length=255, null=True, blank=True)
-    care_plant_video = models.FileField(upload_to='videos/', null=True, blank=True)
-    care_plant_video_minutes = models.CharField(max_length=255, null=True, blank=True)
+    care_plant_video = models.FileField(
+        upload_to="videos/", null=True, blank=True)
+    care_plant_video_minutes = models.CharField(
+        max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.care_plant_name
 
 
 class CareTopics(models.Model):
-    care_plant_id = models.ForeignKey(CarePlanting, on_delete=models.CASCADE, null=True, blank=True)
+    care_plant_id = models.ForeignKey(
+        CarePlanting, on_delete=models.CASCADE, null=True, blank=True
+    )
     care_topic_name = models.CharField(max_length=255, null=True, blank=True)
-    care_topic_video = models.FileField(upload_to='videos/', null=True, blank=True)
-    care_topic_video_minutes = models.CharField(max_length=255, null=True, blank=True)
+    care_topic_video = models.FileField(
+        upload_to="videos/", null=True, blank=True)
+    care_topic_video_minutes = models.CharField(
+        max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.care_topic_name
-
-

@@ -23,6 +23,7 @@ from plants.views.plant_app_views import (
     CareTopicsView,
     CareTopicsHistoryView,
     LocationMarketView,
+    CarePlantingTreeView
 )
 
 urlpatterns = [
@@ -72,9 +73,10 @@ urlpatterns = [
     path('app/plant-recently-viewed/', PlantRecentlyViewedView.as_view(), name='plant-recently-viewed'),
     path('app/plant-popular/', PlantPopularView.as_view(), name='plant-popular'),
     path('app/plant-filter-categories/<int:id>/', PlantFilterCategoriesView.as_view(), name='plant-filter-categories'),
-    path('app/plant-profile/', PlantGetView.as_view(), name='plat-profile'),
+    path('app/plant-profile/', PlantGetView.as_view(), name='plant-profile'),
     path('app/plant-care/', CarePlantingView.as_view(), name='plant-care'),
-    path('app/plant-care-topic/<int:id>/', CareTopicsView.as_view(), name='plat-care-topic'),
-    path('app/plant-care-topic-history/', CareTopicsHistoryView.as_view(), name='plat-care-topic-history'),
-    path('app/plant-location-market/', LocationMarketView.as_view(), name='plat-location-market'),
+    path('app/plant-care-topic/<int:id>/', CareTopicsView.as_view(), name='plant-care-topic'),
+    path('app/plant-care-topic-history/', CareTopicsHistoryView.as_view(), name='plant-care-topic-history'),
+    path('app/plant-location-market/', LocationMarketView.as_view(), name='plant-location-market'),
+    path('app/plant-care-trees/', CarePlantingTreeView.as_view(), name='plant-care-trees'),
 ]

@@ -18,7 +18,8 @@ from plants.serializers.plant_app_serializers import (
     CareTopicSerializer,
     PlantTopicHistorySeriazlier,
     PlantTopicHistoryCreateSeriazlier,
-    LocationSerializer
+    LocationSerializer,
+    CarePlantingTreeSerializer
 )
 """ Plant Model """
 from plants.models import (
@@ -28,7 +29,8 @@ from plants.models import (
     CarePlanting,
     CareTopics,
     CareTopicHistory,
-    LocationPlantMarket
+    LocationPlantMarket,
+    CarePlantingTree
 )
 from authen.renderers import (
     UserRenderers
@@ -127,3 +129,10 @@ class LocationMarketView(APIView):
         serializer = LocationSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+class CarePlantingTreeView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        queryset = CarePlantingTree.objects.all()
+        serializer = CarePlantingTreeSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

@@ -89,3 +89,10 @@ class LocationPlantMarket(models.Model):
 
     def __str__(self):
         return self.location_name
+
+
+class CarePlantingTree(models.Model):
+    name = models.CharField(max_length=255, null=True, blank=True)
+    img = models.ImageField(upload_to='shops/', null=True, blank=True)
+    price = models.CharField(max_length=255, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)

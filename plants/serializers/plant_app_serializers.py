@@ -9,7 +9,8 @@ from plants.models import (
     CarePlanting,
     CareTopics,
     CareTopicHistory,
-    LocationPlantMarket
+    LocationPlantMarket,
+    CarePlantingTree
 )
 
 from authen.serializers import (
@@ -118,4 +119,17 @@ class LocationSerializer(serializers.ModelSerializer):
             'location_name',
             'location_img',
             'location_url'
+        ]
+
+
+class CarePlantingTreeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CarePlantingTree
+        fields = [
+            'id',
+            'name',
+            'img',
+            'price',
+            'description',
         ]

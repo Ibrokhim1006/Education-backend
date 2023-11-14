@@ -24,7 +24,11 @@ from plants.views.plant_app_views import (
     CareTopicsHistoryView,
     LocationMarketView,
     CarePlantingTreeView,
-    CarePlantingGetView
+    CarePlantingGetView,
+    LastRecentlyViewedPlantView,
+    CarePlantingTreeSearchView,
+    CarePlantingSearchView,
+    PlantSearchView
 )
 
 urlpatterns = [
@@ -81,4 +85,8 @@ urlpatterns = [
     path('app/plant-care-topic-history/', CareTopicsHistoryView.as_view(), name='plant-care-topic-history'),
     path('app/plant-location-market/', LocationMarketView.as_view(), name='plant-location-market'),
     path('app/plant-care-trees/', CarePlantingTreeView.as_view(), name='plant-care-trees'),
+    path('app/plant-recently-viewed/', LastRecentlyViewedPlantView.as_view(), name='plant-recently-viewed'),
+    path('app/plant-search/', PlantSearchView.as_view(), name='plant-search'),
+    path('app/plant-care_search/', CarePlantingSearchView.as_view(), name='plant-care_search'),
+    path('app/plant-care_tree_search/', CarePlantingTreeSearchView.as_view(), name='plant-care_tree_search'),
 ]

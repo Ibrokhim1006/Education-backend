@@ -1,3 +1,5 @@
+from operator import mod
+
 from django.db import models
 from authen.models import (
     CustomUser
@@ -24,6 +26,21 @@ class Plants(models.Model):
     )
     plant_type = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateField(auto_now_add=True)
+
+
+class PlantRecentlyViewed(models.Model):
+    plant_id = models.ForeignKey(
+        Plants,
+        on_delete=models.CASCADE, null=True, blank=True, related_name="img"
+    )
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE,
+        null=True, blank=True
+    )
+    created_at = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.plant_id.plant_name
 
 
 class PlantImages(models.Model):
@@ -97,3 +114,6 @@ class CarePlantingTree(models.Model):
     img = models.ImageField(upload_to='shops/', null=True, blank=True)
     price = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name

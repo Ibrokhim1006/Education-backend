@@ -1,7 +1,7 @@
 """ Django Library """
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from django.db.models import Q
+from django.db.models import Q, F
 
 """ Django Rest Framework Library """
 from rest_framework import generics, permissions, status, views
@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework import filters
+from datetime import datetime, timedelta
 
 from plants.serializers.plant_app_serializers import (
     PlantCategoriesSerializer,
@@ -20,6 +21,7 @@ from plants.serializers.plant_app_serializers import (
     PlantTopicHistoryCreateSeriazlier,
     LocationSerializer,
     CarePlantingTreeSerializer,
+    PlantRecentlyViewedSerializer
 )
 
 """ Plant Model """
@@ -32,6 +34,7 @@ from plants.models import (
     CareTopicHistory,
     LocationPlantMarket,
     CarePlantingTree,
+    PlantRecentlyViewed
 )
 from authen.renderers import UserRenderers
 
@@ -136,3 +139,43 @@ class CarePlantingTreeView(APIView):
         queryset = CarePlantingTree.objects.all()
         serializer = CarePlantingTreeSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+class LastRecentlyViewedPlantView(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [permissions.IsAuthenticatedOrReadOnly, AllowAny]
+
+    def get(self,request, *args, **kwargs):
+        today = datetime.now().date()
+        delta = timedelta(days=7)
+        start_date = today - delta
+        end_date = today + delta
+        queryset = PlantRecentlyViewed.objects.select_related('user').filter(
+            Q(user=request.user)
+        ).filter(
+            Q(created_at__range=(start_date, end_date))
+        ).order_by(F('created_at').desc())
+        serializer = PlantRecentlyViewedSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class PlantSearchView(generics.ListAPIView):
+    queryset = Plants.objects.all()
+    serializer_class = PlantSerializers
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['plant_name']
+
+
+class CarePlantingSearchView(generics.ListAPIView):
+    queryset = CarePlanting.objects.all()
+    serializer_class = CarePlantingSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['care_plant_name']
+
+
+class CarePlantingTreeSearchView(generics.ListAPIView):
+    queryset = CarePlantingTree.objects.all()
+    serializer_class = CarePlantingTreeSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name']

@@ -80,6 +80,7 @@ class PlantSerializers(serializers.ModelSerializer):
             "plant_water",
             "plant_light",
             "plant_tall",
+            "plant_price",
             "plant_categories",
             "plant_type",
             "img",

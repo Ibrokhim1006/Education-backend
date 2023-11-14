@@ -43,7 +43,8 @@ class CarePlanting(models.Model):
         upload_to="videos/", null=True, blank=True)
     care_plant_video_minutes = models.CharField(
         max_length=255, null=True, blank=True)
-
+    care_plant_desc = models.TextField(null=True, blank=True)
+    care_plant_content = models.TextField(null=True, blank=True)
     def __str__(self):
         return self.care_plant_name
 

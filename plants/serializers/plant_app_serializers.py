@@ -10,13 +10,14 @@ from plants.models import (
     CareTopics,
     CareTopicHistory,
     LocationPlantMarket,
-    CarePlantingTree
+    CarePlantingTree,
+    PlantRecentlyViewed,
 )
 
 from authen.serializers import (
     UserInformationSerializers
 )
-
+from plants.serializers.dash_serializers import PlantSerializers
 
 
 
@@ -135,3 +136,24 @@ class CarePlantingTreeSerializer(serializers.ModelSerializer):
             'price',
             'description',
         ]
+
+
+class PlantRecentlyViewedSerializer(serializers.ModelSerializer):
+    plant_id = PlantSerializers(read_only=True)
+    user = UserInformationSerializers(read_only=True)
+
+    class Meta:
+        model = PlantRecentlyViewed
+        fields = [
+            'plant_id',
+            'user',
+            'created_at'
+        ]
+
+        def create(self, validated_data):
+            create = PlantRecentlyViewed.objects.create(
+                **validated_data
+            )
+            create.user = self.context.get('user')
+            create.save()
+            return create

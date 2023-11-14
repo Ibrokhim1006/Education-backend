@@ -58,6 +58,8 @@ class CarePlantingSerializer(serializers.ModelSerializer):
             'care_plant_name',
             'care_plant_video',
             'care_plant_video_minutes',
+            'care_plant_desc',
+            'care_plant_content'
         ]
 
 

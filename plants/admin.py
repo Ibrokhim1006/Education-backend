@@ -8,7 +8,8 @@ from plants.models import (
     CareTopics,
     CareTopicHistory,
     LocationPlantMarket,
-    CarePlantingTree
+    CarePlantingTree,
+    PlantRecentlyViewed
 )
 
 
@@ -20,3 +21,4 @@ admin.site.register(CareTopics)
 admin.site.register(CareTopicHistory)
 admin.site.register(LocationPlantMarket)
 admin.site.register(CarePlantingTree)
+admin.site.register(PlantRecentlyViewed)

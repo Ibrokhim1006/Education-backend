@@ -88,3 +88,34 @@ class PlantTopicHistorySeriazlier(serializers.ModelSerializer):
             'user',
             'created_at',
         ]
+
+
+class PlantTopicHistoryCreateSeriazlier(serializers.ModelSerializer):
+
+    class Meta:
+        model = CareTopicHistory
+        fields = [
+            'id',
+            'care_topic_id',
+            'user',
+            'created_at',
+        ]
+        def create(self, validated_data):
+            create = CareTopicHistory.objects.create(
+                **validated_data
+            )
+            create.user = self.context.get('user')
+            create.save()
+            return create
+
+
+class LocationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = LocationPlantMarket
+        fields = [
+            'id',
+            'location_name',
+            'location_img',
+            'location_url'
+        ]

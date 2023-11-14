@@ -17,6 +17,8 @@ from plants.serializers.plant_app_serializers import (
     CarePlantingSerializer,
     CareTopicSerializer,
     PlantTopicHistorySeriazlier,
+    PlantTopicHistoryCreateSeriazlier,
+    LocationSerializer
 )
 """ Plant Model """
 from plants.models import (
@@ -27,6 +29,9 @@ from plants.models import (
     CareTopics,
     CareTopicHistory,
     LocationPlantMarket
+)
+from authen.renderers import (
+    UserRenderers
 )
 
 
@@ -75,5 +80,50 @@ class PlantGetView(APIView):
 class CarePlantingView(APIView):
 
     def get(self, request, *args, **kwargs):
+        queryset = CarePlanting.objects.all()
+        serializer = CarePlantingSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-        return
+
+class CareTopicsView(APIView):
+
+    def get(self, request, id, *args, **kwargs):
+        filter_by = get_object_or_404(CarePlanting, id=id)
+        queryset = CareTopics.objects.select_related('care_plant_id').filter(
+            Q(care_plant_id=filter_by)
+        )
+        serializer = CareTopicSerializer(queryset)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CareTopicsHistoryView(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [permissions.IsAuthenticatedOrReadOnly, AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        queryset = CareTopicHistory.objects.select_related('user').filter(
+            Q(user=request.user)
+        )
+        serializer = PlantTopicHistorySeriazlier(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        serializer = PlantTopicHistoryCreateSeriazlier(
+            data=request.data, partial=True,
+            context={
+                'user': request.user
+            }
+        )
+        if serializer.save(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LocationMarketView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        queryset = LocationPlantMarket.objects.all()
+        serializer = LocationSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+

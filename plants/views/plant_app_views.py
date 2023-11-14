@@ -72,3 +72,8 @@ class PlantGetView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class CarePlantingView(APIView):
+
+    def get(self, request, *args, **kwargs):
+
+        return

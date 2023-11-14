@@ -75,3 +75,11 @@ class CareTopicHistory(models.Model):
 
     def __str__(self):
         return f'{self.care_topic_id.care_topic_name} {self.user.first_name} {self.user.last_name}'
+
+
+class LocationPlantMarket(models.Model):
+    location_name = models.CharField(max_length=255, null=True, blank=True)
+    location_url = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.location_name

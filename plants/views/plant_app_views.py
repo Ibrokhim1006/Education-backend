@@ -19,8 +19,9 @@ from plants.serializers.plant_app_serializers import (
     PlantTopicHistorySeriazlier,
     PlantTopicHistoryCreateSeriazlier,
     LocationSerializer,
-    CarePlantingTreeSerializer
+    CarePlantingTreeSerializer,
 )
+
 """ Plant Model """
 from plants.models import (
     PlantCategories,
@@ -30,16 +31,14 @@ from plants.models import (
     CareTopics,
     CareTopicHistory,
     LocationPlantMarket,
-    CarePlantingTree
+    CarePlantingTree,
 )
-from authen.renderers import (
-    UserRenderers
-)
+from authen.renderers import UserRenderers
 
+from plants.serializers.dash_serializers import PlantSerializers
 
 
 class PlantCategoriesView(APIView):
-
     def get(self, request, *args, **kwargs):
         queryset = PlantCategories.objects.all()
         serializer = PlantCategoriesSerializer(queryset, many=True)
@@ -49,38 +48,37 @@ class PlantCategoriesView(APIView):
 class PlantRecentlyViewedView(APIView):
     def get(self, request, *args, **kwargs):
         queryset = Plants.objects.all()[0:4]
-        serializer = PlantsSerializer(queryset, many=True)
+        serializer = PlantSerializers(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class PlantPopularView(APIView):
-
     def get(self, request, *args, **kwargs):
         queryset = Plants.objects.all().order_by("-id")[0:4]
-        serializer = PlantsSerializer(queryset, many=True)
+        serializer = PlantSerializers(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class PlantFilterCategoriesView(APIView):
     def get(self, request, id, *args, **kwargs):
         filter_by = get_object_or_404(PlantCategories, id=id)
-        queryset = Plants.objects.select_related('plant_categories').filter(
-            plant_categories=filter_by
-        ).order_by("-id")[0:4]
-        serializer = PlantsSerializer(queryset, many=True)
+        queryset = (
+            Plants.objects.select_related("plant_categories")
+            .filter(plant_categories=filter_by)
+            .order_by("-id")[0:4]
+        )
+        serializer = PlantSerializers(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class PlantGetView(APIView):
-
     def get(self, request, id, *args, **kwargs):
         queryset = get_object_or_404(Plants, id=id)
-        serializer = PlantsSerializer(queryset)
+        serializer = PlantSerializers(queryset)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class CarePlantingView(APIView):
-
     def get(self, request, *args, **kwargs):
         queryset = CarePlanting.objects.all()
         serializer = CarePlantingSerializer(queryset, many=True)
@@ -96,10 +94,9 @@ class CarePlantingGetView(APIView):
 
 
 class CareTopicsView(APIView):
-
     def get(self, request, id, *args, **kwargs):
         filter_by = get_object_or_404(CarePlanting, id=id)
-        queryset = CareTopics.objects.select_related('care_plant_id').filter(
+        queryset = CareTopics.objects.select_related("care_plant_id").filter(
             Q(care_plant_id=filter_by)
         )
         serializer = CareTopicSerializer(queryset)
@@ -111,7 +108,7 @@ class CareTopicsHistoryView(APIView):
     perrmisson_class = [permissions.IsAuthenticatedOrReadOnly, AllowAny]
 
     def get(self, request, *args, **kwargs):
-        queryset = CareTopicHistory.objects.select_related('user').filter(
+        queryset = CareTopicHistory.objects.select_related("user").filter(
             Q(user=request.user)
         )
         serializer = PlantTopicHistorySeriazlier(queryset, many=True)
@@ -119,10 +116,7 @@ class CareTopicsHistoryView(APIView):
 
     def post(self, request, *args, **kwargs):
         serializer = PlantTopicHistoryCreateSeriazlier(
-            data=request.data, partial=True,
-            context={
-                'user': request.user
-            }
+            data=request.data, partial=True, context={"user": request.user}
         )
         if serializer.save(raise_exception=True):
             serializer.save()
@@ -131,7 +125,6 @@ class CareTopicsHistoryView(APIView):
 
 
 class LocationMarketView(APIView):
-
     def get(self, request, *args, **kwargs):
         queryset = LocationPlantMarket.objects.all()
         serializer = LocationSerializer(queryset, many=True)
@@ -139,7 +132,6 @@ class LocationMarketView(APIView):
 
 
 class CarePlantingTreeView(APIView):
-
     def get(self, request, *args, **kwargs):
         queryset = CarePlantingTree.objects.all()
         serializer = CarePlantingTreeSerializer(queryset, many=True)

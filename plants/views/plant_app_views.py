@@ -87,6 +87,14 @@ class CarePlantingView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class CarePlantingGetView(APIView):
+
+    def get(self, request, id, *args, **kwargs):
+        queryset = get_object_or_404(CarePlanting, id=id)
+        serializer = CarePlantingSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class CareTopicsView(APIView):
 
     def get(self, request, id, *args, **kwargs):

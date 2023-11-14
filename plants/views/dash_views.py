@@ -10,6 +10,9 @@ from plants.models import (
     Plants,
     PlantImages,
     CarePlanting,
+    CareTopics,
+    LocationPlantMarket,
+    CareTopicHistory,
 )
 from plants.serializers.dash_serializers import (
     PlantCategoriesSerializers,
@@ -20,6 +23,11 @@ from plants.serializers.dash_serializers import (
     PlantImagesCrudSerializers,
     CarePlantingSerializers,
     CarePlantingCrudSerializers,
+    CareTopicsSerializers,
+    CareTopicsCrudSerializers,
+    LocationPlantMarketSerializers,
+    LocationPlantMarketCrudSerializers,
+    CareTopicHistorySerializers,
 )
 
 
@@ -283,3 +291,201 @@ class CarePlantingCrudViews(APIView):
         objects_get.delete()
         return Response(
             {"message": "Delete success"}, status=status.HTTP_200_OK)
+
+
+# Care Topics
+class CareTopicsViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+    pagination_class = PageNumberPagination
+    serializer_class = CareTopicsSerializers
+
+    @property
+    def paginator(self):
+        if not hasattr(self, "_paginator"):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+                self._paginator = self.pagination_class()
+        else:
+            pass
+        return self._paginator
+
+    def paginate_queryset(self, queryset):
+        if self.paginator is None:
+            return None
+        return self.paginator.paginate_queryset(
+            queryset, self.request, view=self)
+
+    def get_paginated_response(self, data):
+        assert self.paginator is not None
+        return self.paginator.get_paginated_response(data)
+
+    def get(self, request, format=None, *args, **kwargs):
+        instance = CareTopics.objects.all().order_by("pk")
+        page = self.paginate_queryset(instance)
+        if page is not None:
+            serializer = self.get_paginated_response(
+                self.serializer_class(page, many=True).data
+            )
+        else:
+            serializer = self.serializer_class(instance, many=True)
+        return Response(
+            {"data": serializer.data, "page_number": self.paginator.page_size},
+            status=status.HTTP_200_OK,
+        )
+
+    def post(self, request):
+        serializers = CareTopicsCrudSerializers(data=request.data)
+        if serializers.is_valid(raise_exception=True):
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CareTopicsCrudViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request, pk):
+        objects_list = CareTopics.objects.filter(id=pk)
+        serializers = CareTopicsSerializers(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+    def put(self, request, pk):
+        serializers = CareTopicsCrudSerializers(
+            instance=CareTopics.objects.filter(id=pk)[0],
+            data=request.data, partial=True
+        )
+        if serializers.is_valid(raise_exception=True):
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_200_OK)
+        return Response(
+            {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    def delete(self, request, pk):
+        objects_get = CareTopics.objects.get(id=pk)
+        objects_get.delete()
+        return Response(
+            {"message": "Delete success"}, status=status.HTTP_200_OK)
+
+
+# Location Market
+class LocationPlantMarketViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+    pagination_class = PageNumberPagination
+    serializer_class = LocationPlantMarketSerializers
+
+    @property
+    def paginator(self):
+        if not hasattr(self, "_paginator"):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+                self._paginator = self.pagination_class()
+        else:
+            pass
+        return self._paginator
+
+    def paginate_queryset(self, queryset):
+        if self.paginator is None:
+            return None
+        return self.paginator.paginate_queryset(
+            queryset, self.request, view=self)
+
+    def get_paginated_response(self, data):
+        assert self.paginator is not None
+        return self.paginator.get_paginated_response(data)
+
+    def get(self, request, format=None, *args, **kwargs):
+        instance = LocationPlantMarket.objects.all().order_by("pk")
+        page = self.paginate_queryset(instance)
+        if page is not None:
+            serializer = self.get_paginated_response(
+                self.serializer_class(page, many=True).data
+            )
+        else:
+            serializer = self.serializer_class(instance, many=True)
+        return Response(
+            {"data": serializer.data, "page_number": self.paginator.page_size},
+            status=status.HTTP_200_OK,
+        )
+
+    def post(self, request):
+        serializers = LocationPlantMarketCrudSerializers(data=request.data)
+        if serializers.is_valid(raise_exception=True):
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LocationPlantMarketCrudViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+
+    def get(self, request, pk):
+        objects_list = LocationPlantMarket.objects.filter(id=pk)
+        serializers = LocationPlantMarketSerializers(objects_list, many=True)
+        return Response(serializers.data, status=status.HTTP_200_OK)
+
+    def put(self, request, pk):
+        serializers = LocationPlantMarketCrudSerializers(
+            instance=LocationPlantMarket.objects.filter(id=pk)[0],
+            data=request.data, partial=True
+        )
+        if serializers.is_valid(raise_exception=True):
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_200_OK)
+        return Response(
+            {"error": "update error data"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    def delete(self, request, pk):
+        objects_get = LocationPlantMarket.objects.get(id=pk)
+        objects_get.delete()
+        return Response(
+            {"message": "Delete success"}, status=status.HTTP_200_OK)
+
+
+class CareTopicHistoryViews(APIView):
+    render_classes = [UserRenderers]
+    perrmisson_class = [IsAuthenticated]
+    pagination_class = PageNumberPagination
+    serializer_class = CareTopicHistorySerializers
+
+    @property
+    def paginator(self):
+        if not hasattr(self, "_paginator"):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+                self._paginator = self.pagination_class()
+        else:
+            pass
+        return self._paginator
+
+    def paginate_queryset(self, queryset):
+        if self.paginator is None:
+            return None
+        return self.paginator.paginate_queryset(
+            queryset, self.request, view=self)
+
+    def get_paginated_response(self, data):
+        assert self.paginator is not None
+        return self.paginator.get_paginated_response(data)
+
+    def get(self, request, format=None, *args, **kwargs):
+        instance = CareTopicHistory.objects.all().order_by("pk")
+        page = self.paginate_queryset(instance)
+        if page is not None:
+            serializer = self.get_paginated_response(
+                self.serializer_class(page, many=True).data
+            )
+        else:
+            serializer = self.serializer_class(instance, many=True)
+        return Response(
+            {"data": serializer.data, "page_number": self.paginator.page_size},
+            status=status.HTTP_200_OK,
+        )

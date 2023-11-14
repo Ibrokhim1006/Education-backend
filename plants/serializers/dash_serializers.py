@@ -1,10 +1,25 @@
 from rest_framework import serializers
+from authen.models import CustomUser
 from plants.models import (
     PlantCategories,
     Plants,
     PlantImages,
     CarePlanting,
+    CareTopics,
+    LocationPlantMarket,
+    CareTopicHistory,
 )
+
+
+class UserInformationSerializers(serializers.ModelSerializer):
+    """User Profiles Serializers"""
+
+    class Meta:
+        """User Model Fileds"""
+
+        model = CustomUser
+        fields = [
+            "id", "username", "first_name", "last_name"]
 
 
 class PlantCategoriesSerializers(serializers.ModelSerializer):
@@ -223,3 +238,147 @@ class CarePlantingCrudSerializers(serializers.ModelSerializer):
                 "care_plant_video", instance.care_plant_video)
         instance.save()
         return instance
+
+
+# Care topick
+class CareTopicsSerializers(serializers.ModelSerializer):
+    """CareTopics Serializers"""
+    care_plant_id = CarePlantingSerializers(read_only=True)
+    care_topic_view_user = UserInformationSerializers(many=True, read_only=True)
+
+    class Meta:
+        """CareTopics Model Fileds"""
+
+        model = CareTopics
+        fields = [
+            "id",
+            "care_plant_id",
+            "care_topic_name",
+            "care_topic_video",
+            "care_topic_video_minutes",
+            "care_topic_view_user",
+        ]
+
+
+class CareTopicsCrudSerializers(serializers.ModelSerializer):
+    """CareTopics Serializers"""
+
+    care_topic_video = serializers.FileField(
+        max_length=None,
+        allow_empty_file=False,
+        allow_null=False,
+        use_url=False,
+        required=False,
+    )
+
+    class Meta:
+        """CarePlanting Model Fileds"""
+
+        model = CareTopics
+        fields = [
+            "id",
+            "care_plant_id",
+            "care_topic_name",
+            "care_topic_video",
+            "care_topic_video_minutes",
+            "care_topic_view_user",
+        ]
+
+    def create(self, validated_data):
+        """CareTopics Create And Multiple Img Funcation"""
+        care_plating = CareTopics.objects.create(**validated_data)
+        care_plating.save()
+        return care_plating
+
+    def update(self, instance, validated_data):
+        """CareTopics Update Funcation"""
+        instance.care_plant_id = validated_data.get(
+            "care_plant_id", instance.care_plant_id)
+
+        instance.care_plant_video_minutes = validated_data.get(
+            "care_plant_video_minutes", instance.care_plant_video_minutes
+        )
+        instance.care_topic_video_minutes = validated_data.get(
+            "care_topic_video_minutes", instance.care_topic_video_minutes
+        )
+
+        if instance.care_topic_video == None:
+            instance.care_topic_video = self.context.get("care_topic_video")
+        else:
+            instance.care_topic_video = validated_data.get(
+                "care_topic_video", instance.care_topic_video)
+        instance.save()
+        return instance
+
+
+# Location Market
+class LocationPlantMarketSerializers(serializers.ModelSerializer):
+    """LocationPlantMarket Serializers"""
+
+    class Meta:
+        """LocationPlantMarket Model Fileds"""
+
+        model = LocationPlantMarket
+        fields = [
+            "id",
+            "location_name",
+            "location_img",
+            "location_url",
+        ]
+
+
+class LocationPlantMarketCrudSerializers(serializers.ModelSerializer):
+    """LocationPlantMarket Serializers"""
+
+    location_img = serializers.ImageField(
+        max_length=None,
+        allow_empty_file=False,
+        allow_null=False,
+        use_url=False,
+        required=False,
+    )
+
+    class Meta:
+        """LocationPlantMarket Model Fileds"""
+
+        model = LocationPlantMarket
+        fields = [
+            "id",
+            "location_name",
+            "location_img",
+            "location_url",
+        ]
+
+    def create(self, validated_data):
+        """LocationPlantMarket Create And Multiple Img Funcation"""
+        care_plating = LocationPlantMarket.objects.create(**validated_data)
+        care_plating.save()
+        return care_plating
+
+    def update(self, instance, validated_data):
+        """LocationPlantMarket Update Funcation"""
+        instance.location_name = validated_data.get(
+            "location_name", instance.location_name)
+
+        instance.location_url = validated_data.get(
+            "location_url", instance.location_url
+        )
+
+        if instance.location_img == None:
+            instance.location_img = self.context.get("location_img")
+        else:
+            instance.location_img = validated_data.get(
+                "location_img", instance.location_img)
+        instance.save()
+        return instance
+
+
+class CareTopicHistorySerializers(serializers.ModelSerializer):
+    """CareTopicHistory Serializers"""
+    user = UserInformationSerializers(read_only=True)
+
+    class Meta:
+        """CareTopicHistory Model Fileds"""
+
+        model = CareTopicHistory
+        fields = '__all__'

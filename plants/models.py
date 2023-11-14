@@ -28,7 +28,8 @@ class Plants(models.Model):
 
 class PlantImages(models.Model):
     plant_id = models.ForeignKey(
-        Plants, on_delete=models.CASCADE, null=True, blank=True
+        Plants,
+        on_delete=models.CASCADE, null=True, blank=True, related_name="img"
     )
     plant_image = models.ImageField(upload_to="plants/", null=True, blank=True)
 

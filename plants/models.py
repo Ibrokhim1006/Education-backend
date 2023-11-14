@@ -56,6 +56,10 @@ class CareTopics(models.Model):
         upload_to="videos/", null=True, blank=True)
     care_topic_video_minutes = models.CharField(
         max_length=255, null=True, blank=True)
+    care_topic_view_user = models.ManyToManyField(
+        CustomUser,
+        null=True, blank=True
+    )
 
 
     def __str__(self):
@@ -79,6 +83,7 @@ class CareTopicHistory(models.Model):
 
 class LocationPlantMarket(models.Model):
     location_name = models.CharField(max_length=255, null=True, blank=True)
+    location_img = models.ImageField(upload_to='shops/', null=True, blank=True)
     location_url = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):

@@ -153,7 +153,7 @@ class LastRecentlyViewedPlantView(APIView):
     render_classes = [UserRenderers]
     perrmisson_class = [permissions.IsAuthenticatedOrReadOnly, AllowAny]
 
-    def get(self,request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         today = datetime.now().date()
         delta = timedelta(days=7)
         start_date = today - delta
@@ -167,6 +167,18 @@ class LastRecentlyViewedPlantView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class RecentlyUploadedView(APIView):
+    def get(self, request, *args, **kwargs):
+        today = datetime.now().date()
+        delta = timedelta(days=7)
+        start_date = today - delta
+        end_date = today + delta
+
+        queryset = CareTopics.objects.filter(
+            Q(created_at__range=(start_date, end_date))
+        )
+        serializer = CareTopicSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
     def post(self, request, *args, **kwargs):

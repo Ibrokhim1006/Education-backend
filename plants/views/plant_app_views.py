@@ -164,7 +164,7 @@ class LastRecentlyViewedPlantView(APIView):
             Q(user=request.user)
         ).filter(
             Q(created_at__range=(start_date, end_date))
-        ).order_by(F('created_at').desc())
+        ).order_by(F('created_at').desc())[0:4]
         serializer = PlantRecentlyViewedSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -194,7 +194,7 @@ class RecentlyUploadedView(APIView):
 
         queryset = CareTopics.objects.filter(
             Q(created_at__range=(start_date, end_date))
-        )
+        )[0:4]
         serializer = CareTopicSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

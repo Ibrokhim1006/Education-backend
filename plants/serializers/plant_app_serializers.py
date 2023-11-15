@@ -76,7 +76,8 @@ class CareTopicSerializer(serializers.ModelSerializer):
             'care_topic_name',
             'care_topic_video',
             'care_topic_video_minutes',
-            'care_topic_view_user'
+            'care_topic_view_user',
+            'created_at'
         ]
 
 

@@ -31,7 +31,7 @@ class Plants(models.Model):
 class PlantRecentlyViewed(models.Model):
     plant_id = models.ForeignKey(
         Plants,
-        on_delete=models.CASCADE, null=True, blank=True, related_name="img"
+        on_delete=models.CASCADE, null=True, blank=True
     )
     user = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE,
@@ -39,8 +39,7 @@ class PlantRecentlyViewed(models.Model):
     )
     created_at = models.DateField(auto_now_add=True)
 
-    def __str__(self):
-        return self.plant_id.plant_name
+
 
 
 class PlantImages(models.Model):

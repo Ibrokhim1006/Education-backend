@@ -146,6 +146,16 @@ class PlantRecentlyViewedSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlantRecentlyViewed
         fields = [
+            'id',
+            'plant_id',
+            'user',
+            'created_at'
+        ]
+
+class PlantRecentlyViewedCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlantRecentlyViewed
+        fields = [
             'plant_id',
             'user',
             'created_at'
@@ -153,8 +163,6 @@ class PlantRecentlyViewedSerializer(serializers.ModelSerializer):
 
         def create(self, validated_data):
             create = PlantRecentlyViewed.objects.create(
-                **validated_data
+                plant_id=validated_data['plant_id']
             )
-            create.user = self.context.get('user')
-            create.save()
             return create

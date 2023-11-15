@@ -21,7 +21,8 @@ from plants.serializers.plant_app_serializers import (
     PlantTopicHistoryCreateSeriazlier,
     LocationSerializer,
     CarePlantingTreeSerializer,
-    PlantRecentlyViewedSerializer
+    PlantRecentlyViewedSerializer,
+    PlantRecentlyViewedCreateSerializer
 )
 
 """ Plant Model """
@@ -107,7 +108,8 @@ class CareTopicsView(APIView):
 
 
 class CareTopicGetView(APIView):
-
+    render_classes = [UserRenderers]
+    perrmisson_class = [permissions.IsAuthenticatedOrReadOnly, AllowAny]
     def get(self, request, id, *args, **kwargs):
         queryset = get_object_or_404(CareTopics, id=id)
         serializer = CareTopicSerializer(queryset, many=True)
@@ -167,15 +169,15 @@ class LastRecentlyViewedPlantView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-        serializer = PlantRecentlyViewedSerializer(
+        serializer = PlantRecentlyViewedCreateSerializer(
             data=request.data,
             partial=True,
-            context={
-                'user': request.user
-            }
         )
+
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
+            serializer.save(
+                user=request.user
+            )
             return Response(serializer.data,
                             status=status.HTTP_201_CREATED)
         return Response(serializer.errors,

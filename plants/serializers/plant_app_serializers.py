@@ -66,7 +66,7 @@ class CarePlantingSerializer(serializers.ModelSerializer):
 
 class CareTopicSerializer(serializers.ModelSerializer):
     care_plant_id = CarePlantingSerializer(read_only=True)
-    care_view_user = UserInformationSerializers(read_only=True, many=True)
+    care_topic_view_user = UserInformationSerializers(read_only=True, many=True)
 
     class Meta:
         model = CareTopics

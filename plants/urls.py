@@ -56,26 +56,7 @@ urlpatterns = [
         LocationPlantMarketCrudViews.as_view()),
     path('dash/care_topic_history_views/', CareTopicHistoryViews.as_view()),
     # plants app
-    path(
-        "app/plant-categories/",
-        PlantCategoriesView.as_view(), name="plant-categories"
-    ),
-    path(
-        "app/plant-recently-viewed/",
-        PlantRecentlyViewedView.as_view(),
-        name="plant-recently-viewed",
-    ),
-    path(
-        "app/plant-popular/",
-        PlantPopularView.as_view(), name="plant-popular"),
-    path(
-        "app/plant-filter-categories/<int:id>/",
-        PlantFilterCategoriesView.as_view(),
-        name="plant-filter-categories",
-    ),
-    path("app/plant-profile/", PlantGetView.as_view(), name="plat-profile"),
     path('app/plant-categories/', PlantCategoriesView.as_view(), name='plant-categories'),
-    path('app/plant-recently-viewed/', PlantRecentlyViewedView.as_view(), name='plant-recently-viewed'),
     path('app/plant-popular/', PlantPopularView.as_view(), name='plant-popular'),
     path('app/plant-filter-categories/<int:id>/', PlantFilterCategoriesView.as_view(), name='plant-filter-categories'),
     path('app/plant-profile/<int:id>/', PlantGetView.as_view(), name='plant-profile'),

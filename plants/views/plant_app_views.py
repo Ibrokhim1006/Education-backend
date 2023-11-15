@@ -102,7 +102,7 @@ class CareTopicsView(APIView):
         queryset = CareTopics.objects.select_related("care_plant_id").filter(
             Q(care_plant_id=filter_by)
         )
-        serializer = CareTopicSerializer(queryset)
+        serializer = CareTopicSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -158,6 +158,8 @@ class LastRecentlyViewedPlantView(APIView):
         ).order_by(F('created_at').desc())
         serializer = PlantRecentlyViewedSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 
 
     def post(self, request, *args, **kwargs):
